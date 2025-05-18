@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contador desde o último título do Tottenham</title>
+  <style>
+    body {
+      background-color: #0a0a0a;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    #contador {
+      font-size: 2rem;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Tempo desde o último título do Tottenham</h1>
+  <div id="contador">Carregando...</div>
+
+  <script>
+    function atualizarContador() {
+      const ultimaConquista = new Date("2008-02-24T14:15:00-03:00"); // Horário de Brasília
+      const agora = new Date();
+      let diff = agora - ultimaConquista;
+
+      const segundosTotais = Math.floor(diff / 1000);
+
+      let segundos = segundosTotais % 60;
+      let minutos = Math.floor((segundosTotais / 60)) % 60;
+      let horas = Math.floor((segundosTotais / 3600)) % 24;
+
+      // calcular dias, meses e anos com precisão
+      const dataAtual = new Date(ultimaConquista);
+      let anos = 0, meses = 0;
+
+      while (dataAtual.getFullYear() < agora.getFullYear() || 
+            (dataAtual.getFullYear() === agora.getFullYear() && dataAtual.getMonth() < agora.getMonth()) ||
+            (dataAtual.getFullYear() === agora.getFullYear() && dataAtual.getMonth() === agora.getMonth() && dataAtual.getDate() <= agora.getDate())) {
+        dataAtual.setMonth(dataAtual.getMonth() + 1);
+        meses++;
+      }
+
+      dataAtual.setMonth(dataAtual.getMonth() - 1);
+      meses--;
+      anos = Math.floor(meses / 12);
+      meses = meses % 12;
+
+      const dias = Math.floor((agora - dataAtual) / (1000 * 60 * 60 * 24));
+
+      document.getElementById("contador").textContent = 
+        `${anos} anos, ${meses} meses, ${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
+    }
+
+    atualizarContador();
+    setInterval(atualizarContador, 1000);
+  </script>
+</body>
+</html>
